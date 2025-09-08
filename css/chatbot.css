@@ -1,0 +1,30 @@
+/* Chatbot Button */
+.chatbot-btn {
+  position: fixed;
+  right: 10vw;
+  bottom: 40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #698bad 16%, #546f91 50%);
+  box-shadow: 0 4px 17px 0 #acd0f6b9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.24s, box-shadow 0.21s, transform 0.12s;
+  z-index: 5;
+  cursor: pointer;
+  outline: none;
+}
+.chatbot-btn img {
+  width: 70px;
+  height: 70px;
+  display: block;
+}
+.chatbot-btn:hover,
+.chatbot-btn:focus {
+  background: linear-gradient(135deg, #3884e0 40%, #c0e0ff 100%);
+  box-shadow: 0 10px 38px #3884e066;
+  transform: translateY(-2px) scale(1.04);
+}

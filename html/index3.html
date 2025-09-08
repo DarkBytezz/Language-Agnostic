@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Courses We Offer</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style3.css" />
+    <link rel="stylesheet" href="../css/chatbot.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+    <div class="offer-header">Courses We Offer</div>
+    <div class="course-grid">
+        <div class="grid-tile">
+            <div class="tile-main-title">MBA</div>
+            <div class="tile-main-desc">Master of Business Administration </div>
+            <div class="tile-separator"></div>
+            <div class="tile-info-block"><span class="tile-label">Eligibility:</span> <span class="tile-value">Bachelors
+                (Recognized)</span></div>
+                <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">2
+                    years</span></div>
+                    <button class="tile-btn" onclick="window.location.href='../html/mba.html'">Know More</button>
+                    
+                    
+                </div>
+                <div class="grid-tile">
+                    <div class="tile-main-title">BBA</div>
+                    <div class="tile-main-desc">Bachelor of Business Administration </div>
+                    <div class="tile-separator"></div>
+                    <div class="tile-info-block"><span class="tile-label">Eligibility:</span>
+                        <span class="tile-value">    +2
+                            (Recognized)</span></div>
+                            <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">3
+                                years</span></div>
+                                <button class="tile-btn">Know More</button>
+                            </div>
+                            <div class="grid-tile ">
+                                <div class="tile-main-title">MCA</div>
+                                <div class="tile-main-desc">Master of Computer Application</div>
+                                <div class="tile-separator"></div>
+                                <div class="tile-info-block"><span class="tile-label">Eligibility:</span> <span class="tile-value">Bachelors
+                                    (Recognized)</span></div>
+                                    <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">2
+                                        years</span></div>
+                                        <button class="tile-btn">Know More</button>
+                                    </div>
+                                    <div class="grid-tile">
+                                        <div class="tile-main-title">BCA</div>
+                                        <div class="tile-main-desc">Bachelor of Computer Application</div>
+                                        <div class="tile-separator"></div>
+                                        <div class="tile-info-block"><span class="tile-label">Eligibility:</span> <span class="tile-value">+2
+                                            (Recognized)</span></div>
+            <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">3
+                    years</span></div>
+                    <button class="tile-btn">Know More</button>
+                </div>
+                <div class="grid-tile">
+                    <div class="tile-main-title">MA</div>
+                    <div class="tile-main-desc">Master of Arts </div>
+                    <div class="tile-separator"></div>
+                    <div class="tile-info-block"><span class="tile-label">Eligibility:</span> <span class="tile-value">Bachelors
+                        (Recognized)</span></div>
+                        <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">2
+                            years</span></div>
+                            <button class="tile-btn">Know More</button>
+                        </div>
+                        <div class="grid-tile">
+                            <div class="tile-main-title">BA</div>
+                            <div class="tile-main-desc">Bachelor of Arts </div>
+                            <div class="tile-separator"></div>
+                            <div class="tile-info-block"><span class="tile-label">Eligibility:</span> <span class="tile-value">Bachelors
+                                (Recognized)</span></div>
+                                <div class="tile-info-block"><span class="tile-label">Duration:</span> <span class="tile-value">3
+                    years</span></div>
+                    <button class="tile-btn">Know More</button>
+                </div>
+            </div>
+   <div id="courseModal" class="modal">
+  
+       
+       <button class="chatbot-btn" title="Chatbot">
+     <img src="/img/chatbot.png" alt="Chatbot" />
+   </button>
+       <script src="../js/jscript3.js"></script>
+       <script src="../js/jscript2.js"></script>
+       
+       <script>
+           
+document.querySelectorAll(".tile-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-target");
+        if (target) {
+            window.location.href = `../html/${target}`;
+        }
+    });
+});
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>MBA Specializations</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/chatbot.css" />
+  <style>
+    body { margin: 0; background: #f8f9fd; font-family: 'Poppins', sans-serif; }
+    .offer-header { text-align: center; color: #050820; font-size: 2rem; font-weight: 600; padding: 30px 0; }
+    .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; padding: 20px;}
+    .grid-tile {
+      background: #cfd2da; border-radius: 30px; padding: 30px; box-shadow: 0 7px 30px rgba(62,79,142,0.14);
+      display: flex; flex-direction: column; align-items: center; transition: transform 0.2s;
+      cursor: default;
+    }
+    .grid-tile:hover { transform: scale(1.05); background: linear-gradient(120deg, #e7effa 80%, #b3c5f4 100%); }
+    .tile-main-title { font-size: 1.5rem; font-weight: 700; color: #292a32; text-align: center; margin-bottom: 10px; }
+    .tile-main-desc { color: #22253a; font-size: 1rem; font-weight: 500; text-align: center; }
+  
+    .details-btn {
+      margin-top: 16px;
+      padding: 10px 28px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #6484dd 0%, #7183a4 100%);
+      color: black;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(58, 111, 251, 0.4);
+      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+    .details-btn:hover, .details-btn:focus {
+      background: linear-gradient(90deg, #aac8ff 0%, #4c67b0 100%);
+      color:white;
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(58, 50, 51, 0.6);
+    }
+    .details-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 14px rgba(58, 111, 251, 0.3);
+      color: #0d0d0d;
+    }
+  
+    /* Modal styling */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: rgb(157, 188, 238);
+      padding: 20px;
+      max-width: 400px;
+      margin: 100px auto;
+      border-radius: 10px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.2);
+      position: relative;
+      font-family: 'Poppins', sans-serif;
+    }
+    .close-btn {
+      position: absolute; top: 8px; right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #333;
+    }
+    .modal-content p {
+      margin-bottom: 8px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+<div id="chatbotPopup" class="popup-overlay" style="display:none;">
+  <div class="popup-content">
+    <span id="closePopup" class="close-btn">&times;</span>
+    <div class="popup-header">
+      <h2>Ask Me Anything</h2>
+    </div>
+    <div class="popup-body">
+      <div id="chatContainer" class="chat-container"></div>
+      <form id="chatForm">
+        <input type="text" id="userInput" placeholder="Type your query..." autocomplete="off"/>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <div class="offer-header">MBA Specializations</div>
+  <div class="course-grid">
+    <div class="grid-tile">
+      <div class="tile-main-title">MBA in Data Science</div>
+      <div class="tile-main-desc">Focus on data analytics and big data.</div>
+      <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
+    </div>
+    <div class="grid-tile">
+      <div class="tile-main-title">MBA in Artificial Intelligence</div>
+      <div class="tile-main-desc">Learn AI applications in business.</div>
+      <button class="details-btn" onclick="openDetails('AI')">View Details</button>
+    </div>
+    <div class="grid-tile">
+      <div class="tile-main-title">MBA in Finance</div>
+      <div class="tile-main-desc">Specialize in financial management.</div>
+      <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
+    </div>
+    <div class="grid-tile">
+      <div class="tile-main-title">MBA in Marketing</div>
+      <div class="tile-main-desc">Strategies for modern marketing.</div>
+      <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
+    </div>
+    <div class="grid-tile">
+      <div class="tile-main-title">MBA in Human Resources</div>
+      <div class="tile-main-desc">Managing organizational talent.</div>
+      <button class="details-btn" onclick="openDetails('HR')">View Details</button>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div id="detailsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeDetails()">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <p><strong>Duration:</strong> <span id="modalDuration"></span></p>
+      <p><strong>Eligibility:</strong> <span id="modalEligibility"></span></p>
+      <p><strong>Admission Process:</strong> <span id="modalAdmission"></span></p>
+      <p><strong>Fee Structure:</strong> <span id="modalFees"></span></p>
+    </div>
+  </div>
+  
+  <button class="chatbot-btn" title="Chatbot">
+  <img src="/img/chatbot.png" alt="Chatbot" />
+</button>
+  <script>
+    const specializationDetails = {
+      "Data Science": {
+        description: "Master modern data analytics, big data technologies, and decision science.",
+        duration: "2 years",
+        eligibility: "MBA program enrollment",
+        admission: "Based on MBA admission process",
+        fees: "$22,000 approx"
+      },
+      "AI": {
+        description: "Learn AI tools and applications relevant to business problems.",
+        duration: "2 years",
+        eligibility: "MBA program enrollment",
+        admission: "Based on MBA admission process",
+        fees: "$22,000 approx"
+      },
+      "Finance": {
+        description: "Specialize in corporate finance, investments, and risk management.",
+        duration: "2 years",
+        eligibility: "MBA program enrollment",
+        admission: "Based on MBA admission process",
+        fees: "$21,000 approx"
+      },
+      "Marketing": {
+        description: "Strategies and tools for digital and traditional marketing.",
+        duration: "2 years",
+        eligibility: "MBA program enrollment",
+        admission: "Based on MBA admission process",
+        fees: "$20,000 approx"
+      },
+      "HR": {
+        description: "Develop skills in human resource management and organizational behavior.",
+        duration: "2 years",
+        eligibility: "MBA program enrollment",
+        admission: "Based on MBA admission process",
+        fees: "$20,000 approx"
+      }
+    };
+
+    function openDetails(specialization) {
+      const modal = document.getElementById('detailsModal');
+      const details = specializationDetails[specialization];
+      if (!details) return;
+      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
+      document.getElementById('modalDescription').innerText = details.description;
+      document.getElementById('modalDuration').innerText = details.duration;
+      document.getElementById('modalEligibility').innerText = details.eligibility;
+      document.getElementById('modalAdmission').innerText = details.admission;
+      document.getElementById('modalFees').innerText = details.fees;
+      modal.style.display = 'block';
+    }
+
+    function closeDetails() {
+      document.getElementById('detailsModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('detailsModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+  </script>
+  <script src="../js/jscript2.js"></script>
+
+</body>
+</html>

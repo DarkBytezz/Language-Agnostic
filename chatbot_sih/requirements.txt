@@ -1,0 +1,17 @@
+# Core
+python-dotenv
+numpy
+sounddevice
+soundfile
+
+# LangChain + Google
+langchain
+langchain-community
+langchain-google-genai
+google-generativeai
+
+# SarvamAI SDK
+sarvamai
+
+# Optional (safety: parsing & CLI args, usually stdlib but listing for clarity)
+argparse

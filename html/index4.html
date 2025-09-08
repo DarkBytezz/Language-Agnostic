@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scholarships</title>
+  <link rel="stylesheet" href="../css/style4.css" />
+  <link rel="stylesheet" href="../css/chatbot.css" />
+</head>
+<body>
+  <div class="scholarship-container">
+    <h1 class="scholarship-title">Scholarships</h1>
+
+    <div class="scholarship-box phase">
+      <div class="phase-title">Phase -I</div>
+      <ul>
+        <li><span class="marks-range">90.01 to 100 Marks:</span><br /><span class="percentage">100% Scholarship</span></li>
+        <li><span class="marks-range">80 to 90 Marks:</span><br /><span class="percentage">50% Scholarship</span></li>
+        <li><span class="marks-range">70 to 79.99 Marks:</span><br /><span class="percentage">40% Scholarship</span></li>
+        <li><span class="marks-range">60 to 69.99 Marks:</span><br /><span class="percentage">30% Scholarship</span></li>
+        <li><span class="marks-range">50 to 59.99 Marks:</span><br /><span class="percentage">25% Scholarship</span></li>
+        <li><span class="marks-range">40 to 49.99 Marks:</span><br /><span class="percentage">15% Scholarship</span></li>
+        <li><span class="marks-range">30 to 39.99 Marks:</span><br />Eligible</li>
+      </ul>
+    </div>
+    
+    <div class="scholarship-box management">
+      <div class="phase-title">Management Specialized<br />Programs Slabs</div>
+      <ul>
+        <li><span class="marks-range">90 to 100 Marks:</span><br /><span class="percentage">40% Scholarship</span></li>
+        <li><span class="marks-range">80 to 89.99 Marks:</span><br /><span class="percentage">40% Scholarship</span></li>
+        <li><span class="marks-range">70 to 79.99 Marks:</span><br /><span class="percentage">30% Scholarship</span></li>
+        <li><span class="marks-range">60 to 69.99 Marks:</span><br /><span class="percentage">20% Scholarship</span></li>
+        <li><span class="marks-range">50 to 59.99 Marks:</span><br /><span class="percentage">15% Scholarship</span></li>
+        <li><span class="marks-range">40 to 49.99 Marks:</span><br /><span class="percentage">10% Scholarship</span></li>
+      </ul>
+    </div>
+    
+    <div class="scholarship-box phase">
+      <div class="phase-title">Phase -II</div>
+      <ul>
+        <li><span class="marks-range">90.01 to 100 Marks:</span><br /><span class="percentage">100% Scholarship</span></li>
+        <li><span class="marks-range">80 to 90 Marks:</span><br /><span class="percentage">40% Scholarship</span></li>
+        <li><span class="marks-range">70 to 79.99 Marks:</span><br /><span class="percentage">30% Scholarship</span></li>
+        <li><span class="marks-range">60 to 69.99 Marks:</span><br /><span class="percentage">20% Scholarship</span></li>
+        <li><span class="marks-range">50 to 59.99 Marks:</span><br /><span class="percentage">15% Scholarship</span></li>
+        <li><span class="marks-range">40 to 49.99 Marks:</span><br /><span class="percentage">10% Scholarship</span></li>
+        <li><span class="marks-range">30 to 39.99 Marks:</span><br />Eligible</li>
+      </ul>
+    </div>
+    
+    <div class="red-highlight-note">
+      For more detailed info regarding the scholarships, visit the official site.
+    </div>
+  </div>
+  <button class="chatbot-btn" title="Chatbot">
+  <img src="/img/chatbot.png" alt="Chatbot" />
+</button>
+  <script src="../js/jscript2.js"></script>
+  
+  <script>
+    
+document.addEventListener("DOMContentLoaded", () => {
+    const coursesBtn = document.getElementById("coursesBtn");
+    const scholarshipsBtn = document.getElementById("scholarshipsBtn");
+
+    if (coursesBtn) {
+        coursesBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = "/index3"; // loads index3.html
+        });
+    }
+
+    if (scholarshipsBtn) {
+        scholarshipsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = "/index4"; // loads index4.html
+        });
+    }
+});
+
+  </script>
+
+</body>
+</html>
