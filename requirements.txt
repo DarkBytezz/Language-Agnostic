@@ -1,29 +1,31 @@
-# === Core utilities ===
-python-dotenv
-numpy
-sounddevice
-soundfile
+# web + server
+fastapi==0.116.1
+uvicorn==0.22.0
+gunicorn==20.1.0
 
-# === Web server ===
-fastapi
-uvicorn
+# dotenv + uploads
+python-dotenv==1.1.1
+python-multipart==0.0.6
+aiofiles==23.1.0
 
-# === LangChain + Google ===
-langchain
-langchain-community
-langchain-google-genai
-google-generativeai
+# audio libs (if used)
+sounddevice==0.5.2
+soundfile==0.13.1
 
-# === SarvamAI SDK ===
-sarvamai
+# helpers / APIs
+requests==2.31.0
 
-# === PDF ingestion (for vector DB) ===
-pypdf
-faiss-cpu
+# your libs (keep these if you need them; may increase build time)
+langchain==0.3.27
+langchain-community==0.3.29
+langchain-google-genai==2.1.10
+google-generativeai==0.8.5
+sarvamai==0.1.20
 
-# === Extra LangChain deps (used by loaders & text splitters) ===
-tiktoken
+# pdfs / vectors
+pypdf==6.0.0
+faiss-cpu==1.12.0
+tiktoken==0.11.0
 
-# === Development / Parsing / CLI (safety & utils) ===
-argparse
-python-multiport
+# safe numpy compatible with py3.11
+numpy==1.25.3
