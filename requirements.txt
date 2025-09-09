@@ -1,17 +1,29 @@
-# Core
+# === Core utilities ===
 python-dotenv
 numpy
 sounddevice
 soundfile
 
-# LangChain + Google
+# === Web server ===
+fastapi
+uvicorn
+
+# === LangChain + Google ===
 langchain
 langchain-community
 langchain-google-genai
 google-generativeai
 
-# SarvamAI SDK
+# === SarvamAI SDK ===
 sarvamai
 
-# Optional (safety: parsing & CLI args, usually stdlib but listing for clarity)
+# === PDF ingestion (for vector DB) ===
+pypdf
+faiss-cpu
+
+# === Extra LangChain deps (used by loaders & text splitters) ===
+tiktoken
+
+# === Development / Parsing / CLI (safety & utils) ===
 argparse
+python-multiport
