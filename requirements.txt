@@ -13,7 +13,6 @@ sounddevice==0.5.2
 soundfile==0.13.1
 
 # helpers / APIs
-requests==2.31.0
 
 # your libs (keep these if you need them; may increase build time)
 langchain==0.3.27
