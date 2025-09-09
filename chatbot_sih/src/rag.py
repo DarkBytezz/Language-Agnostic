@@ -18,7 +18,6 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
-import google.generativeai as genai
 
 # Sarvam (for translation)
 from sarvamai import SarvamAI
@@ -35,8 +34,7 @@ except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
-# Configure clients
-genai.configure(api_key=GOOGLE_API_KEY)
+# Configure clients (no direct google.generativeai import/config needed)
 client = SarvamAI(api_subscription_key=SARVAM_API_KEY)
 
 # Language map (same mapping as your old UI)
@@ -66,9 +64,8 @@ def get_conversational_chain():
 
 def get_answer(user_question):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-   # safest and OS-independent
+    # safest and OS-independent
     index_path = os.path.join("chatbot_sih", "faiss_index")
-
 
     # Check if FAISS index exists
     if not os.path.exists(index_path) or not os.path.exists(os.path.join(index_path, "index.faiss")):
