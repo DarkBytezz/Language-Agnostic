@@ -180,29 +180,87 @@ def extract_transcript(resp):
 
 
 def extract_detected_language(resp):
-    if not resp or isinstance(resp, str):
+    """
+    More robust extraction of detected language code from Sarvam response.
+
+    - Checks direct keys: language_code, language, detected_language, lang, detectedLang
+    - Looks inside nested dicts: data, metadata, alternatives
+    - Parses string/object reprs like "language_code='hi-IN'"
+    - Normalizes short forms using SHORTHAND_MAP and validates against ALLOWED_LANG_CODES
+    - Returns normalized code (e.g. 'pa-IN') or None
+    """
+    if not resp:
         return None
-    for key in ("language", "detected_language", "lang", "detectedLang"):
-        if key in resp and isinstance(resp[key], str):
-            return resp[key]
+
+    def _normalize(code: str):
+        if not code or not isinstance(code, str):
+            return None
+        c = code.strip()
+        # unify underscores/dashes and lower for matching
+        c = c.replace("_", "-")
+        # direct exact allowed
+        if c in ALLOWED_LANG_CODES:
+            return c
+        # try case-insensitive match to allowed codes
+        for ac in ALLOWED_LANG_CODES:
+            if ac.lower() == c.lower():
+                return ac
+        # shorthand map (e.g. 'pa' -> 'pa-IN' or 'en' -> 'en-IN')
+        if c in SHORTHAND_MAP:
+            return SHORTHAND_MAP[c]
+        if c.lower() in SHORTHAND_MAP:
+            return SHORTHAND_MAP[c.lower()]
+        # bare 2-letter code -> attempt to map to xx-IN
+        if re.fullmatch(r"^[a-z]{2}$", c.lower()):
+            cand = SHORTHAND_MAP.get(c.lower(), c.lower() + "-IN")
+            if cand in ALLOWED_LANG_CODES:
+                return cand
+            return cand
+        return None
+
+    # 1) If dict-like: check common keys at top-level
     if isinstance(resp, dict):
-        if "data" in resp and isinstance(resp["data"], dict):
-            d = resp["data"]
-            for key in ("language","lang","detected_language"):
-                if key in d and isinstance(d[key], str):
-                    return d[key]
-        if "metadata" in resp and isinstance(resp["metadata"], dict):
-            m = resp["metadata"]
-            for key in ("language","lang"):
-                if key in m and isinstance(m[key], str):
-                    return m[key]
+        for key in ("language_code", "language", "detected_language", "lang", "detectedLang"):
+            if key in resp and isinstance(resp[key], str) and resp[key].strip():
+                norm = _normalize(resp[key].strip())
+                if norm:
+                    return norm
+
+        # 2) check nested under 'data' or 'metadata'
+        for parent in ("data", "metadata"):
+            if parent in resp and isinstance(resp[parent], dict):
+                d = resp[parent]
+                for key in ("language_code", "language", "detected_language", "lang", "detectedLang"):
+                    if key in d and isinstance(d[key], str) and d[key].strip():
+                        norm = _normalize(d[key].strip())
+                        if norm:
+                            return norm
+
+        # 3) check alternatives list
         if "alternatives" in resp and isinstance(resp["alternatives"], list):
             for alt in resp["alternatives"]:
                 if isinstance(alt, dict):
-                    for k in ("language","lang"):
-                        if k in alt and isinstance(alt[k], str):
-                            return alt[k]
+                    for key in ("language_code", "language", "detected_language", "lang", "detectedLang"):
+                        if key in alt and isinstance(alt[key], str) and alt[key].strip():
+                            norm = _normalize(alt[key].strip())
+                            if norm:
+                                return norm
+
+    # 4) If response is a string or object repr: regex search for language codes
+    try:
+        s = resp if isinstance(resp, str) else str(resp)
+        # look for patterns like language_code='hi-IN' or language="pa-IN" or lang=pa
+        m = re.search(r"(?:language_code|language|detected_language|lang)\s*=\s*['\"]?([a-z]{2}(?:-[A-Za-z]{2})?)['\"]?", s)
+        if m:
+            norm = _normalize(m.group(1))
+            if norm:
+                return norm
+    except Exception:
+        pass
+
+    # Nothing reliable found
     return None
+
 
 def record_and_transcribe(language: str = "auto", seconds: int = DEFAULT_RECORD_SECONDS, model: str = STT_MODEL_NAME, save_to: str = None):
     """

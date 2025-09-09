@@ -15,8 +15,8 @@ app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # load environment variables (keeps same behavior as your project)
-load_dotenv(dotenv_path=os.path.join(BASE_DIR, "chatbot_sih", ".env"))
-
+# load_dotenv(dotenv_path=os.path.join(BASE_DIR, "chatbot_sih", ".env"))
+load_dotenv()
 # === Mount static folders (keep your project structure) ===
 app.mount("/css", StaticFiles(directory=os.path.join(BASE_DIR, "css")), name="css")
 app.mount("/js", StaticFiles(directory=os.path.join(BASE_DIR, "js")), name="js")
