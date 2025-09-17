@@ -94,30 +94,30 @@
   </div>
 </div>
 
-  <div class="offer-header">MBA Specializations</div>
+  <div class="offer-header">BBA Specializations</div>
   <div class="course-grid">
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Data Science</div>
+      <div class="tile-main-title">BBA in Data Science</div>
       <div class="tile-main-desc">Focus on data analytics and big data.</div>
       <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Artificial Intelligence</div>
+      <div class="tile-main-title">BBA in Artificial Intelligence</div>
       <div class="tile-main-desc">Learn AI applications in business.</div>
       <button class="details-btn" onclick="openDetails('AI')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Finance</div>
+      <div class="tile-main-title">BBA in Finance</div>
       <div class="tile-main-desc">Specialize in financial management.</div>
       <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Marketing</div>
+      <div class="tile-main-title">BBA in Marketing</div>
       <div class="tile-main-desc">Strategies for modern marketing.</div>
       <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Human Resources</div>
+      <div class="tile-main-title">BBA in Human Resources</div>
       <div class="tile-main-desc">Managing organizational talent.</div>
       <button class="details-btn" onclick="openDetails('HR')">View Details</button>
     </div>
@@ -139,69 +139,70 @@
   <button class="chatbot-btn" title="Chatbot">
   <img src="/img/chatbot.png" alt="Chatbot" />
 </button>
-  <script>
-    const specializationDetails = {
-      "Data Science": {
-        description: "Master modern data analytics, big data technologies, and decision science.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
-      },
-      "AI": {
-        description: "Learn AI tools and applications relevant to business problems.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
-      },
-      "Finance": {
-        description: "Specialize in corporate finance, investments, and risk management.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$21,000 approx"
-      },
-      "Marketing": {
-        description: "Strategies and tools for digital and traditional marketing.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
-      },
-      "HR": {
-        description: "Develop skills in human resource management and organizational behavior.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
-      }
-    };
-
-    function openDetails(specialization) {
-      const modal = document.getElementById('detailsModal');
-      const details = specializationDetails[specialization];
-      if (!details) return;
-      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
-      document.getElementById('modalDescription').innerText = details.description;
-      document.getElementById('modalDuration').innerText = details.duration;
-      document.getElementById('modalEligibility').innerText = details.eligibility;
-      document.getElementById('modalAdmission').innerText = details.admission;
-      document.getElementById('modalFees').innerText = details.fees;
-      modal.style.display = 'block';
+<script>
+  const specializationDetails = {
+    "Data Science": {
+      description: "Learn data analysis, visualization, and business intelligence tools at an undergraduate level.",
+      duration: "3 years",
+      eligibility: "10+2 (any stream, preferably with Mathematics/Commerce)",
+      admission: "Merit-based or through entrance exam (as per university norms)",
+      fees: "$10,000 – $15,000 approx"
+    },
+    "AI": {
+      description: "Foundational knowledge of Artificial Intelligence and its applications in business processes.",
+      duration: "3 years",
+      eligibility: "10+2 (any stream, preferably with Mathematics/Science background)",
+      admission: "Merit-based or through entrance exam",
+      fees: "$10,000 – $15,000 approx"
+    },
+    "Finance": {
+      description: "Focus on accounting, taxation, financial management, and investment basics.",
+      duration: "3 years",
+      eligibility: "10+2 (any stream, preferably Commerce/Mathematics)",
+      admission: "Merit-based or through entrance exam",
+      fees: "$9,000 – $14,000 approx"
+    },
+    "Marketing": {
+      description: "Learn fundamentals of branding, consumer behavior, and digital marketing strategies.",
+      duration: "3 years",
+      eligibility: "10+2 (any stream)",
+      admission: "Merit-based or through entrance exam",
+      fees: "$9,000 – $14,000 approx"
+    },
+    "HR": {
+      description: "Introduction to organizational behavior, talent acquisition, and employee management.",
+      duration: "3 years",
+      eligibility: "10+2 (any stream)",
+      admission: "Merit-based or through entrance exam",
+      fees: "$9,000 – $13,000 approx"
     }
+  };
 
-    function closeDetails() {
-      document.getElementById('detailsModal').style.display = 'none';
+  function openDetails(specialization) {
+    const modal = document.getElementById('detailsModal');
+    const details = specializationDetails[specialization];
+    if (!details) return;
+    document.getElementById('modalTitle').innerText = "BBA in " + specialization;
+    document.getElementById('modalDescription').innerText = details.description;
+    document.getElementById('modalDuration').innerText = details.duration;
+    document.getElementById('modalEligibility').innerText = details.eligibility;
+    document.getElementById('modalAdmission').innerText = details.admission;
+    document.getElementById('modalFees').innerText = details.fees;
+    modal.style.display = 'block';
+  }
+
+  function closeDetails() {
+    document.getElementById('detailsModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('detailsModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
     }
+  };
+</script>
 
-    window.onclick = function(event) {
-      const modal = document.getElementById('detailsModal');
-      if (event.target === modal) {
-        modal.style.display = 'none';
-      }
-    };
-  </script>
   <script src="../js/jscript2.js"></script>
 
 </body>

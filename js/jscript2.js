@@ -93,7 +93,10 @@
               document.head.appendChild(link);
             }
 
-            popupEl.style.display = 'flex';
+            // ✅ Restore popup open state
+            if (sessionStorage.getItem("chatbotOpen") === "true") {
+              popupEl.style.display = 'flex';
+            }
 
             const inputEl = popupEl.querySelector('.popup-input');
             const searchBtn = popupEl.querySelector('.search-icon');
@@ -106,18 +109,28 @@
               popupEl.insertBefore(chatContainer, popupEl.querySelector('.popup-searchbar'));
             }
 
+            // ✅ Restore chat history
+            let history = JSON.parse(sessionStorage.getItem("chatHistory") || "[]");
+            history.forEach(msg => {
+              const el = document.createElement('div');
+              el.className = `chat-message ${msg.from}`;
+              el.textContent = msg.text;
+              chatContainer.appendChild(el);
+            });
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // --- Chat message append (styled by CSS classes) ---
             function appendMessage(text, from = 'bot') {
               const el = document.createElement('div');
+              el.className = `chat-message ${from}`;
               el.textContent = text;
-              el.style.margin = '8px 0';
-              if (from === 'user') {
-                el.style.fontWeight = '600';
-                el.style.textAlign = 'right';
-              } else {
-                el.style.textAlign = 'left';
-              }
               chatContainer.appendChild(el);
               chatContainer.scrollTop = chatContainer.scrollHeight;
+
+              // ✅ Save to sessionStorage
+              let history = JSON.parse(sessionStorage.getItem("chatHistory") || "[]");
+              history.push({ text, from });
+              sessionStorage.setItem("chatHistory", JSON.stringify(history));
             }
 
             async function sendQuery() {
@@ -144,6 +157,27 @@
 
                 if (data.answer) {
                   appendMessage(data.answer, 'bot');
+
+                  const keywords = {
+                    "mba": "mba.html",
+                    "mca": "mca.html",
+                    "bba": "bba.html",
+                    "bca": "bca.html",
+                    "ma": "ma.html",
+                    "ba": "ba.html",
+                    "scholarship": "index4.html",
+                    "courses": "index3.html"
+                  };
+
+                  const qLower = query.toLowerCase();
+                  for (const key in keywords) {
+                    if (qLower.includes(key)) {
+                      // Instead of closing popup, make it draggable + persist
+                      makePopupDraggable(popupEl);
+                      window.location.href = "/" + keywords[key].replace(".html", "");
+                      break;
+                    }
+                  }
                   if (data.audio_file) {
                     try {
                       const audio = new Audio(`/download_audio/${data.audio_file}`);
@@ -168,90 +202,121 @@
             if (inputEl) inputEl.addEventListener('keypress', e => { if (e.key === 'Enter') sendQuery(); });
 
             // 🎤 Mic recording logic
-            // 🎤 Mic recording logic
-            // ensure mic icon stays clean (remove any leftover text)
-micBtn.textContent = "";
+            micBtn.textContent = "";
+            if (micBtn) {
+              let mediaRecorder;
+              let audioChunks = [];
+              let recordingMsg;
 
-  if (micBtn) {
-  let mediaRecorder;
-  let audioChunks = [];
-  let recordingMsg;
+              micBtn.addEventListener('click', async () => {
+                if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                  mediaRecorder = new MediaRecorder(stream);
+                  audioChunks = [];
 
-  micBtn.addEventListener('click', async () => {
-    if (!mediaRecorder || mediaRecorder.state === "inactive") {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      audioChunks = [];
+                  // show "Speak now..."
+                  recordingMsg = document.createElement("div");
+                  recordingMsg.textContent = "🎤 Speak now...";
+                  recordingMsg.style.fontStyle = "italic";
+                  recordingMsg.style.color = "#d9534f";
+                  chatContainer.appendChild(recordingMsg);
+                  chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // show "Speak now..."
-      recordingMsg = document.createElement("div");
-      recordingMsg.textContent = "🎤 Speak now...";
-      recordingMsg.style.fontStyle = "italic";
-      recordingMsg.style.color = "#d9534f";
-      chatContainer.appendChild(recordingMsg);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+                  mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
 
-      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                  mediaRecorder.onstop = async () => {
+                    if (recordingMsg) recordingMsg.remove();
 
-      mediaRecorder.onstop = async () => {
-        if (recordingMsg) recordingMsg.remove();
+                    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                    const formData = new FormData();
+                    formData.append("file", audioBlob, "recording.wav");
 
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        const formData = new FormData();
-        formData.append("file", audioBlob, "recording.wav");
+                    const loadingMsg = document.createElement("div");
+                    loadingMsg.textContent = "🎤 Processing...";
+                    loadingMsg.style.fontStyle = "italic";
+                    chatContainer.appendChild(loadingMsg);
 
-        const loadingMsg = document.createElement("div");
-        loadingMsg.textContent = "🎤 Processing...";
-        loadingMsg.style.fontStyle = "italic";
-        chatContainer.appendChild(loadingMsg);
+                    try {
+                      const resp = await fetch("/record_and_transcribe/", { method: "POST", body: formData });
+                      const data = await resp.json();
+                      loadingMsg.remove();
 
-        try {
-          const resp = await fetch("/record_and_transcribe/", { method: "POST", body: formData });
-          const data = await resp.json();
-          loadingMsg.remove();
+                      if (data.transcript) appendMessage(data.transcript, "user");
+                      if (data.answer) appendMessage(data.answer, "bot");
+                      else if (data.error) appendMessage("❌ Error: " + data.error, "bot");
+                    } catch (err) {
+                      loadingMsg.remove();
+                      appendMessage("❌ Mic send failed", "bot");
+                      console.error(err);
+                    }
+                  };
 
-          if (data.transcript) appendMessage(data.transcript, "user");
-          if (data.answer) appendMessage(data.answer, "bot");
-          else if (data.error) appendMessage("❌ Error: " + data.error, "bot");
-        } catch (err) {
-          loadingMsg.remove();
-          appendMessage("❌ Mic send failed", "bot");
-          console.error(err);
-        }
-      };
-
-      mediaRecorder.start();
-
-      // 🔵 add recording class
-      micBtn.classList.add("recording");
-
-      // 🔴 add pulse effect via inline style (JS-controlled)
-      micBtn.style.animation = "pulse 1.5s infinite";
-    } else {
-      mediaRecorder.stop();
-
-      // back to normal icon
-      micBtn.classList.remove("recording");
-      micBtn.style.animation = "none"; // stop pulsing
-    }
-  });
-}
-
+                  mediaRecorder.start();
+                  micBtn.classList.add("recording");
+                } else {
+                  mediaRecorder.stop();
+                  micBtn.classList.remove("recording");
+                }
+              });
+            }
 
             const closeBtn = popupEl.querySelector('#closePopup');
-            if (closeBtn) closeBtn.onclick = () => { popupEl.style.display = 'none'; };
+            if (closeBtn) closeBtn.onclick = () => {
+              popupEl.style.display = 'none';
+              sessionStorage.setItem("chatbotOpen", "false"); // ✅ Save closed state
+            };
 
-            popupEl.onclick = e => { if (e.target === popupEl) popupEl.style.display = 'none'; };
+            popupEl.onclick = e => {
+              if (e.target === popupEl) {
+                popupEl.style.display = 'none';
+                sessionStorage.setItem("chatbotOpen", "false"); // ✅ Save closed state
+              }
+            };
+
+            // === Make popup draggable + resizable ===
+            function makePopupDraggable(el) {
+              let offsetX = 0, offsetY = 0, isDown = false;
+
+              el.style.position = "fixed";
+              el.style.resize = "both"; 
+              el.style.overflow = "auto"; 
+
+              el.addEventListener("mousedown", (e) => {
+                isDown = true;
+                offsetX = e.clientX - el.offsetLeft;
+                offsetY = e.clientY - el.offsetTop;
+                el.style.cursor = "move";
+              });
+
+              document.addEventListener("mouseup", () => {
+                isDown = false;
+                el.style.cursor = "default";
+              });
+
+              document.addEventListener("mousemove", (e) => {
+                if (!isDown) return;
+                el.style.left = (e.clientX - offsetX) + "px";
+                el.style.top = (e.clientY - offsetY) + "px";
+              });
+            }
+            makePopupDraggable(popupEl.querySelector(".popup-content"));
 
             popupLoaded = true;
             console.log('✅ Popup loaded and ready');
+
+            // ✅ Mark open state when shown
+            popupEl.style.display = 'flex';
+            sessionStorage.setItem("chatbotOpen", "true");
           })
           .catch(err => {
             console.error('Error loading popup:', err);
           });
       } else {
         const el = document.getElementById('chatbotPopup');
-        if (el) el.style.display = 'flex';
+        if (el) {
+          el.style.display = 'flex';
+          sessionStorage.setItem("chatbotOpen", "true"); // ✅ Save open state
+        }
       }
     });
   });

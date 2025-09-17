@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>MBA Specializations</title>
+  <title>MA Specializations</title>
   <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/chatbot.css" />
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -94,32 +94,32 @@
   </div>
 </div>
 
-  <div class="offer-header">MBA Specializations</div>
+  <div class="offer-header">MA Specializations</div>
   <div class="course-grid">
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Data Science</div>
-      <div class="tile-main-desc">Focus on data analytics and big data.</div>
-      <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
+      <div class="tile-main-title">MA in English Literature</div>
+      <div class="tile-main-desc">Focus on classic and modern English literature.</div>
+      <button class="details-btn" onclick="openDetails('English')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Artificial Intelligence</div>
-      <div class="tile-main-desc">Learn AI applications in business.</div>
-      <button class="details-btn" onclick="openDetails('AI')">View Details</button>
+      <div class="tile-main-title">MA in Psychology</div>
+      <div class="tile-main-desc">Study human behavior and psychological theories.</div>
+      <button class="details-btn" onclick="openDetails('Psychology')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Finance</div>
-      <div class="tile-main-desc">Specialize in financial management.</div>
-      <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
+      <div class="tile-main-title">MA in Clinical Psychology</div>
+      <div class="tile-main-desc">Specialize in ancient, medieval, or modern Clinical Psychology.</div>
+      <button class="details-btn" onclick="openDetails('Clinical Psychology')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Marketing</div>
-      <div class="tile-main-desc">Strategies for modern marketing.</div>
-      <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
+      <div class="tile-main-title">MA in Journalism and Mass Communication </div>
+      <div class="tile-main-desc">Learn about governance, policies, and political theory.</div>
+      <button class="details-btn" onclick="openDetails('Journalism and Mass Communication')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Human Resources</div>
-      <div class="tile-main-desc">Managing organizational talent.</div>
-      <button class="details-btn" onclick="openDetails('HR')">View Details</button>
+      <div class="tile-main-title">MA in Economics</div>
+      <div class="tile-main-desc">Understand society, culture, and human interactions.</div>
+      <button class="details-btn" onclick="openDetails('Economics')">View Details</button>
     </div>
   </div>
   
@@ -137,44 +137,45 @@
   </div>
   
   <button class="chatbot-btn" title="Chatbot">
-  <img src="/img/chatbot.png" alt="Chatbot" />
-</button>
+    <img src="/img/chatbot.png" alt="Chatbot" />
+  </button>
+
   <script>
     const specializationDetails = {
-      "Data Science": {
-        description: "Master modern data analytics, big data technologies, and decision science.",
+      "English": {
+        description: "Explore British, American, and world literature along with critical theories.",
         duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        eligibility: "Bachelor’s degree in English or any related field",
+        admission: "Merit-based or entrance exam depending on university",
+        fees: "₹1,92,000 "
       },
-      "AI": {
-        description: "Learn AI tools and applications relevant to business problems.",
+      "Psychology": {
+        description: "Learn counseling, clinical psychology, organizational psychology, and research methods.",
         duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        eligibility: "Bachelor’s degree in Psychology or related discipline",
+        admission: "Merit/entrance exam as per university norms",
+        fees: "₹1,60,000"
       },
-      "Finance": {
-        description: "Specialize in corporate finance, investments, and risk management.",
+      "Clinical Psychology": {
+        description: "Specialize in world Clinical Psychology, Indian Clinical Psychology, or thematic studies in social evolution.",
         duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$21,000 approx"
+        eligibility: "Bachelor’s degree in Clinical Psychology or related field",
+        admission: "Merit-based or entrance test",
+        fees: "₹2,72,000"
       },
-      "Marketing": {
-        description: "Strategies and tools for digital and traditional marketing.",
+      "Journalism and Mass Communication": {
+        description: "Focus on political systems, governance, public policy, and international relations.",
         duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+        eligibility: "Bachelor’s degree in Journalism and Mass Communication  or related field",
+        admission: "Entrance exam or merit-based selection",
+        fees: "₹2,68,000"
       },
-      "HR": {
-        description: "Develop skills in human resource management and organizational behavior.",
+      "Economics": {
+        description: "Understand social theories, research methodologies, and cultural studies.",
         duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+        eligibility: "Bachelor’s degree in Economics or equivalent",
+        admission: "Merit-based or entrance exam",
+        fees: "₹1,92,000"
       }
     };
 
@@ -182,7 +183,7 @@
       const modal = document.getElementById('detailsModal');
       const details = specializationDetails[specialization];
       if (!details) return;
-      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
+      document.getElementById('modalTitle').innerText = "MA in " + specialization;
       document.getElementById('modalDescription').innerText = details.description;
       document.getElementById('modalDuration').innerText = details.duration;
       document.getElementById('modalEligibility').innerText = details.eligibility;

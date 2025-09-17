@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>MBA Specializations</title>
+  <title>MCA Specializations</title>
   <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/chatbot.css" />
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -94,32 +94,32 @@
   </div>
 </div>
 
-  <div class="offer-header">MBA Specializations</div>
+  <div class="offer-header">MCA Specializations</div>
   <div class="course-grid">
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Data Science</div>
-      <div class="tile-main-desc">Focus on data analytics and big data.</div>
+      <div class="tile-main-title">MCA in Data Science</div>
+      <div class="tile-main-desc">Focus on data analytics and machine learning.</div>
       <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Artificial Intelligence</div>
-      <div class="tile-main-desc">Learn AI applications in business.</div>
+      <div class="tile-main-title">MCA in Artificial Intelligence</div>
+      <div class="tile-main-desc">Learn AI, ML, and deep learning applications.</div>
       <button class="details-btn" onclick="openDetails('AI')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Finance</div>
-      <div class="tile-main-desc">Specialize in financial management.</div>
-      <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
+      <div class="tile-main-title">MCA in Cloud Computing</div>
+      <div class="tile-main-desc">Specialize in cloud services and virtualization.</div>
+      <button class="details-btn" onclick="openDetails('Cloud')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Marketing</div>
-      <div class="tile-main-desc">Strategies for modern marketing.</div>
-      <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
+      <div class="tile-main-title">MCA in Cyber Security</div>
+      <div class="tile-main-desc">Focus on ethical hacking and data protection.</div>
+      <button class="details-btn" onclick="openDetails('Cyber')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Human Resources</div>
-      <div class="tile-main-desc">Managing organizational talent.</div>
-      <button class="details-btn" onclick="openDetails('HR')">View Details</button>
+      <div class="tile-main-title">MCA in Software Development</div>
+      <div class="tile-main-desc">Build expertise in software engineering and devops.</div>
+      <button class="details-btn" onclick="openDetails('Software')">View Details</button>
     </div>
   </div>
   
@@ -142,39 +142,39 @@
   <script>
     const specializationDetails = {
       "Data Science": {
-        description: "Master modern data analytics, big data technologies, and decision science.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        description: "Master big data technologies, predictive analytics, and business intelligence.",
+        duration: "3 years",
+        eligibility: "Bachelor’s degree with Mathematics or Computer Science",
+        admission: "Entrance exam or university-based selection",
+        fees: "$15,000 approx"
       },
       "AI": {
-        description: "Learn AI tools and applications relevant to business problems.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        description: "Focus on AI algorithms, natural language processing, and robotics.",
+        duration: "3 years",
+        eligibility: "Bachelor’s degree with strong math background",
+        admission: "Entrance exam or university-based selection",
+        fees: "$16,000 approx"
       },
-      "Finance": {
-        description: "Specialize in corporate finance, investments, and risk management.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$21,000 approx"
+      "Cloud": {
+        description: "Learn cloud architecture, virtualization, and cloud service management.",
+        duration: "3 years",
+        eligibility: "Bachelor's degree in IT/CS or related fields",
+        admission: "Entrance exam or university-based selection",
+        fees: "$15,500 approx"
       },
-      "Marketing": {
-        description: "Strategies and tools for digital and traditional marketing.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Cyber": {
+        description: "Specialize in network security, ethical hacking, and cryptography.",
+        duration: "3 years",
+        eligibility: "Bachelor's degree in Computer Science/IT",
+        admission: "Entrance exam or university-based selection",
+        fees: "$15,500 approx"
       },
-      "HR": {
-        description: "Develop skills in human resource management and organizational behavior.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Software": {
+        description: "Develop advanced skills in programming, software design, and devops.",
+        duration: "3 years",
+        eligibility: "Bachelor's degree in Computer Applications/IT/CS",
+        admission: "Entrance exam or university-based selection",
+        fees: "$14,500 approx"
       }
     };
 
@@ -182,7 +182,7 @@
       const modal = document.getElementById('detailsModal');
       const details = specializationDetails[specialization];
       if (!details) return;
-      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
+      document.getElementById('modalTitle').innerText = "MCA in " + specialization;
       document.getElementById('modalDescription').innerText = details.description;
       document.getElementById('modalDuration').innerText = details.duration;
       document.getElementById('modalEligibility').innerText = details.eligibility;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>MBA Specializations</title>
+  <title>BCA Specializations</title>
   <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/chatbot.css" />
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -23,7 +23,7 @@
       margin-top: 16px;
       padding: 10px 28px;
       border-radius: 12px;
-      background: linear-gradient(90deg, #6484dd 0%, #7183a4 100%);
+      background: linear-gradient(90deg, #6484dd 0%, #7183a4 100%); 
       color: black;
       border: none;
       font-size: 1rem;
@@ -94,32 +94,32 @@
   </div>
 </div>
 
-  <div class="offer-header">MBA Specializations</div>
+  <div class="offer-header">BCA Specializations</div>
   <div class="course-grid">
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Data Science</div>
-      <div class="tile-main-desc">Focus on data analytics and big data.</div>
+      <div class="tile-main-title">BCA in Data Science</div>
+      <div class="tile-main-desc">Learn data analytics and visualization.</div>
       <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Artificial Intelligence</div>
-      <div class="tile-main-desc">Learn AI applications in business.</div>
+      <div class="tile-main-title">BCA in Artificial Intelligence</div>
+      <div class="tile-main-desc">Foundations of AI and ML.</div>
       <button class="details-btn" onclick="openDetails('AI')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Finance</div>
-      <div class="tile-main-desc">Specialize in financial management.</div>
-      <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
+      <div class="tile-main-title">BCA in Cloud Computing</div>
+      <div class="tile-main-desc">Basics of cloud services and virtualization.</div>
+      <button class="details-btn" onclick="openDetails('Cloud')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Marketing</div>
-      <div class="tile-main-desc">Strategies for modern marketing.</div>
-      <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
+      <div class="tile-main-title">BCA in Cyber Security</div>
+      <div class="tile-main-desc">Learn ethical hacking and system security.</div>
+      <button class="details-btn" onclick="openDetails('Cyber')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Human Resources</div>
-      <div class="tile-main-desc">Managing organizational talent.</div>
-      <button class="details-btn" onclick="openDetails('HR')">View Details</button>
+      <div class="tile-main-title">BCA in Software Development</div>
+      <div class="tile-main-desc">Programming, app & web development.</div>
+      <button class="details-btn" onclick="openDetails('Software')">View Details</button>
     </div>
   </div>
   
@@ -142,39 +142,39 @@
   <script>
     const specializationDetails = {
       "Data Science": {
-        description: "Master modern data analytics, big data technologies, and decision science.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        description: "Introduction to data analysis, visualization, and predictive models for business applications.",
+        duration: "3 years",
+        eligibility: "10+2 with Mathematics/Computer Science",
+        admission: "Merit-based or entrance exam (university specific)",
+        fees: "$6,000 – $10,000 approx"
       },
       "AI": {
-        description: "Learn AI tools and applications relevant to business problems.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+        description: "Basics of Artificial Intelligence, machine learning concepts, and their applications.",
+        duration: "3 years",
+        eligibility: "10+2 with Mathematics/Science background",
+        admission: "Merit-based or entrance exam",
+        fees: "$6,500 – $10,500 approx"
       },
-      "Finance": {
-        description: "Specialize in corporate finance, investments, and risk management.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$21,000 approx"
+      "Cloud": {
+        description: "Learn fundamentals of cloud platforms, virtualization, and cloud-based services.",
+        duration: "3 years",
+        eligibility: "10+2 with Computer Science/Mathematics",
+        admission: "Merit-based or entrance exam",
+        fees: "$6,000 – $9,500 approx"
       },
-      "Marketing": {
-        description: "Strategies and tools for digital and traditional marketing.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Cyber": {
+        description: "Study fundamentals of network security, ethical hacking, and data protection.",
+        duration: "3 years",
+        eligibility: "10+2 with Computer Science or Mathematics",
+        admission: "Merit-based or entrance exam",
+        fees: "$6,500 – $10,000 approx"
       },
-      "HR": {
-        description: "Develop skills in human resource management and organizational behavior.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Software": {
+        description: "Focus on programming languages, web/app development, and software engineering basics.",
+        duration: "3 years",
+        eligibility: "10+2 with Mathematics/Computer Science",
+        admission: "Merit-based or entrance exam",
+        fees: "$6,000 – $9,500 approx"
       }
     };
 
@@ -182,7 +182,7 @@
       const modal = document.getElementById('detailsModal');
       const details = specializationDetails[specialization];
       if (!details) return;
-      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
+      document.getElementById('modalTitle').innerText = "BCA in " + specialization;
       document.getElementById('modalDescription').innerText = details.description;
       document.getElementById('modalDuration').innerText = details.duration;
       document.getElementById('modalEligibility').innerText = details.eligibility;

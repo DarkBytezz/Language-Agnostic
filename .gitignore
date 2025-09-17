@@ -1,18 +1,26 @@
-# Virtual environment
+# Python venv & cache
 venv/
-.env/
-.env.example/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# IDE / Editor settings
+# Env files (keys)
+.env
+.env.*
+
+# IDE / Editor
 .vscode/
 .idea/
 
-# OS files
+# OS crap
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs & temp
+*.log
+*.tmp
+
+
+# HuggingFace / transformers cache
+.cache/

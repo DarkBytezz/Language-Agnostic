@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>MBA Specializations</title>
+  <title>BA Specializations</title>
   <link href="https://fonts.googleapis.com/css?family=Poppins:600,500,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/chatbot.css" />
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -94,32 +94,32 @@
   </div>
 </div>
 
-  <div class="offer-header">MBA Specializations</div>
+  <div class="offer-header">BA Specializations</div>
   <div class="course-grid">
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Data Science</div>
-      <div class="tile-main-desc">Focus on data analytics and big data.</div>
-      <button class="details-btn" onclick="openDetails('Data Science')">View Details</button>
+      <div class="tile-main-title">BA in English Literature</div>
+      <div class="tile-main-desc">Explore poetry, drama, novels, and critical theory.</div>
+      <button class="details-btn" onclick="openDetails('English')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Artificial Intelligence</div>
-      <div class="tile-main-desc">Learn AI applications in business.</div>
-      <button class="details-btn" onclick="openDetails('AI')">View Details</button>
+      <div class="tile-main-title">BA in Psychology</div>
+      <div class="tile-main-desc">Understand human mind, behavior, and cognition.</div>
+      <button class="details-btn" onclick="openDetails('Psychology')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Finance</div>
-      <div class="tile-main-desc">Specialize in financial management.</div>
-      <button class="details-btn" onclick="openDetails('Finance')">View Details</button>
+      <div class="tile-main-title">BA in Journalism and Mass Communication</div>
+      <div class="tile-main-desc">Study world, Indian, and cultural Journalism and Mass Communication.</div>
+      <button class="details-btn" onclick="openDetails('Journalism and Mass Communication')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Marketing</div>
-      <div class="tile-main-desc">Strategies for modern marketing.</div>
-      <button class="details-btn" onclick="openDetails('Marketing')">View Details</button>
+      <div class="tile-main-title">BA in Political Science</div>
+      <div class="tile-main-desc">Learn about politics, governance, and public policies.</div>
+      <button class="details-btn" onclick="openDetails('Clinical Psychology')">View Details</button>
     </div>
     <div class="grid-tile">
-      <div class="tile-main-title">MBA in Human Resources</div>
-      <div class="tile-main-desc">Managing organizational talent.</div>
-      <button class="details-btn" onclick="openDetails('HR')">View Details</button>
+      <div class="tile-main-title">BA in Economics</div>
+      <div class="tile-main-desc">Understand social structures, culture, and communities.</div>
+      <button class="details-btn" onclick="openDetails('Economics')">View Details</button>
     </div>
   </div>
   
@@ -137,44 +137,45 @@
   </div>
   
   <button class="chatbot-btn" title="Chatbot">
-  <img src="/img/chatbot.png" alt="Chatbot" />
-</button>
+    <img src="/img/chatbot.png" alt="Chatbot" />
+  </button>
+
   <script>
     const specializationDetails = {
-      "Data Science": {
-        description: "Master modern data analytics, big data technologies, and decision science.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+      "English": {
+        description: "Dive into English poetry, novels, plays, and modern literary criticism.",
+        duration: "3 years",
+        eligibility: "10+2 (any stream, preferably with English as a subject)",
+        admission: "Merit-based or entrance exam depending on university",
+        fees: "₹1,52,000"
       },
-      "AI": {
-        description: "Learn AI tools and applications relevant to business problems.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$22,000 approx"
+      "Psychology": {
+        description: "Study fundamentals of psychology, counseling, and mental health awareness.",
+        duration: "3 years",
+        eligibility: "10+2 (any stream, preferably Science/Arts with Psychology/English)",
+        admission: "Merit-based or entrance exam",
+        fees: "₹1,60,000"
       },
-      "Finance": {
-        description: "Specialize in corporate finance, investments, and risk management.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$21,000 approx"
+      "Journalism and Mass Communication": {
+        description: "Explore historical events, civilizations, and socio-political movements.",
+        duration: "3 years",
+        eligibility: "10+2 (any stream, preferably Arts/Commerce)",
+        admission: "Merit-based or entrance exam",
+        fees: "₹2,68,000"
       },
-      "Marketing": {
-        description: "Strategies and tools for digital and traditional marketing.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Clinical Psychology": {
+        description: "Understand political thought, comparative politics, and international relations.",
+        duration: "3 years",
+        eligibility: "10+2 (any stream)",
+        admission: "Merit-based or entrance exam",
+        fees: "₹2,72,000"
       },
-      "HR": {
-        description: "Develop skills in human resource management and organizational behavior.",
-        duration: "2 years",
-        eligibility: "MBA program enrollment",
-        admission: "Based on MBA admission process",
-        fees: "$20,000 approx"
+      "Economics": {
+        description: "Study social institutions, cultural diversity, and social problems.",
+        duration: "3 years",
+        eligibility: "10+2 (any stream)",
+        admission: "Merit-based or entrance exam",
+        fees: "₹1,92,000"
       }
     };
 
@@ -182,7 +183,7 @@
       const modal = document.getElementById('detailsModal');
       const details = specializationDetails[specialization];
       if (!details) return;
-      document.getElementById('modalTitle').innerText = "MBA in " + specialization;
+      document.getElementById('modalTitle').innerText = "BA in " + specialization;
       document.getElementById('modalDescription').innerText = details.description;
       document.getElementById('modalDuration').innerText = details.duration;
       document.getElementById('modalEligibility').innerText = details.eligibility;

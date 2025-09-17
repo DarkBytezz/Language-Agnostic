@@ -1,3 +1,4 @@
+
 # web + server
 fastapi==0.116.1
 uvicorn==0.22.0
@@ -26,3 +27,45 @@ tiktoken==0.11.0
 
 # safe numpy compatible with py3.11
 numpy==1.26.2
+=======
+# ===== Core & utils =====
+python-dotenv==1.0.0
+numpy==1.26.4
+
+# Audio
+sounddevice==0.5.1
+soundfile==0.12.1
+
+# Web server
+fastapi==0.100.0
+uvicorn[standard]==0.22.0
+aiofiles==23.1.0
+python-multipart==0.0.6
+
+# LangChain ecosystem (pick versions that match each other)
+langchain==0.3.27
+langchain-community==0.3.29
+langchain-google-genai==2.1.12
+google-auth==2.23.0
+google-auth-oauthlib==1.2.0
+httpx==0.24.0
+tiktoken==0.4.0
+
+sentence-transformers 
+langdetect 
+
+# Local embeddings & Transformers
+sentence-transformers==2.2.2
+transformers==4.36.0
+sentencepiece==0.1.99
+
+# Vector DB
+faiss-cpu==1.7.4
+pypdf==3.15.0
+
+# Sarvam SDK (keep if public)
+sarvamai==0.1.0
+
+# Optional / helpful
+openai==1.0.0
+requests==2.32.5

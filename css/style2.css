@@ -126,24 +126,35 @@
   margin-right: 5px;
 }
 
-.mic-icon {
+
+  .mic-icon {
   display: inline-block;
-  width: 40px; height: 40px;
+  width: 40px;
+  height: 40px;
   background: url('../img/mic.png') no-repeat center;
   background-size: 40px;
   margin-left: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
+
+
+
 
 .mic-icon.recording {
-  background: #3c4fdb; /* red */
-  color: white;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
+  background: url('../img/mic.png') no-repeat center;
+  background-size: 40px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite !important;
 }
 
+
+/* Pulse effect */
+@keyframes pulse {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.3); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 @media (max-width: 490px){
   .popup-content { width: 96vw; }
@@ -151,7 +162,7 @@
   .popup-rect2 { width: 55vw; }
 }
 
-.search-icon, .mic-icon {
+.search-icon {
   transition: transform 0.2s ease, filter 0.2s ease;
   cursor: pointer;
 }
@@ -159,4 +170,29 @@
 .search-icon:hover, .mic-icon:hover {
   transform: scale(1.15);   
   filter: brightness(1.2);  
+}
+/* User messages (blue bubble, right aligned) */
+.chat-message.user {
+  background: #3f8efc;   /* blue */
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 14px 14px 0 14px;
+  margin: 6px 0;
+  text-align: right;
+  align-self: flex-end;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* Bot messages (light grey/blue bubble, left aligned) */
+.chat-message.bot {
+  background: #e6ebf5;   /* light grey-blue */
+  color: #2c2c54;
+  padding: 8px 12px;
+  border-radius: 14px 14px 14px 0;
+  margin: 6px 0;
+  text-align: left;
+  align-self: flex-start;
+  max-width: 80%;
+  word-wrap: break-word;
 }
