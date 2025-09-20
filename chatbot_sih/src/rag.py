@@ -10,14 +10,22 @@ import os
 import io
 import json
 import asyncio
+from functools import lru_cache
 from dotenv import load_dotenv
+from typing import List, Tuple, Dict, Any
 
 # Langchain & Google imports (same as before)
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chains.question_answering import load_qa_chain
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+try:
+    from sentence_transformers import CrossEncoder  # optional reranker
+except Exception:  # pragma: no cover
+    CrossEncoder = None
 
 # Sarvam (for translation)
 from sarvamai import SarvamAI
@@ -26,6 +34,7 @@ from sarvamai import SarvamAI
 load_dotenv()
 SARVAM_API_KEY = os.getenv("SARVAM_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("openai_api_key")
 
 # Ensure asyncio loop exists in this thread (fix for grpc.aio)
 try:
@@ -37,6 +46,12 @@ except RuntimeError:
 # Configure clients (no direct google.generativeai import/config needed)
 client = SarvamAI(api_subscription_key=SARVAM_API_KEY)
 
+# -------------------- Globals for reused models/index --------------------
+_EMBEDDINGS = None  # type: Any
+_DB = None  # type: Any
+_CROSS = None  # type: Any
+INDEX_PATH = os.path.join("chatbot_sih", "faiss_index")
+
 # Language map (same mapping as your old UI)
 LANGUAGES = {
     "English": "en-IN",
@@ -47,44 +62,191 @@ LANGUAGES = {
     "Punjabi": "pa-IN"
 }
 
+# Light-weight synonyms to improve recall (can be extended)
+SYNONYMS = {
+    "mba": ["master of business administration", "mba program"],
+    "bba": ["bachelor of business administration", "bba program"],
+    "bca": ["bachelor of computer applications", "bca program"],
+    "mca": ["master of computer applications", "mca program"],
+    "fees": ["fee", "tuition", "fee structure", "tuition fees"],
+    "scholarship": ["scholarships", "financial aid", "fee waiver"],
+}
+
 # -------------------- RAG functions (keep logic unchanged) --------------------
 def get_conversational_chain():
-    prompt_template = """
-    Answer the question as detailed as possible from the provided context. 
-    If the answer is not in context, just say "answer is not available in the context".
-    
+    prompt_template = ChatPromptTemplate.from_template("""
+    You are a helpful university information assistant.
+    Use the provided context to answer the user's question concisely and helpfully.
+    If the context partially answers the question, synthesize the best possible answer and say what is unknown.
+    Only if nothing relevant is in context, reply exactly: "answer is not available in the context".
+
+    Include a short Sources: section listing source_file names you used if available.
+
     Context:\n{context}\n
     Question:\n{question}\n
     Answer:
-    """
+    """)
     model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+    chain = prompt_template | model | StrOutputParser()
     return chain
 
-def get_answer(user_question):
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    # safest and OS-independent
-    index_path = os.path.join("chatbot_sih", "faiss_index")
+def _format_context(docs: List):
+    # Concatenate top documents into a single context string with source hints
+    joined = []
+    for d in docs[:4]:
+        try:
+            src = None
+            try:
+                src = d.metadata.get("source_file") if hasattr(d, "metadata") else None
+            except Exception:
+                src = None
+            prefix = f"[source: {src}]\n" if src else ""
+            joined.append(prefix + d.page_content)
+        except Exception:
+            joined.append(str(d))
+    return "\n\n".join(joined)
 
-    # Check if FAISS index exists
-    if not os.path.exists(index_path) or not os.path.exists(os.path.join(index_path, "index.faiss")):
-        return "⚠️ No knowledge base found. Please upload and process PDFs first."
 
+def _doc_sources(docs: List) -> List[Dict[str, Any]]:
+    sources = []
+    seen = set()
+    for d in docs:
+        try:
+            meta = getattr(d, "metadata", {}) or {}
+            src = meta.get("source_file") or meta.get("source") or None
+            if not src:
+                continue
+            if src in seen:
+                continue
+            seen.add(src)
+            sources.append({"file": src})
+        except Exception:
+            continue
+    return sources
+
+
+def _load_embeddings_and_index():
+    global _EMBEDDINGS, _DB
+    if _EMBEDDINGS is None:
+        _EMBEDDINGS = HuggingFaceEmbeddings(model_name="paraphrase-multilingual-mpnet-base-v2")
+    if _DB is None and os.path.exists(INDEX_PATH) and os.path.exists(os.path.join(INDEX_PATH, "index.faiss")):
+        _DB = FAISS.load_local(INDEX_PATH, _EMBEDDINGS, allow_dangerous_deserialization=True)
+    return _EMBEDDINGS, _DB
+
+
+def _expand_queries(user_question: str) -> List[str]:
+    q = (user_question or "").strip()
+    if not q:
+        return [q]
+    variants = {q}
+    q_lower = q.lower()
+    for key, syns in SYNONYMS.items():
+        if key in q_lower:
+            for s in syns:
+                variants.add(q_lower.replace(key, s))
+    # basic punctuation/whitespace normalization
+    variants.add(" ".join(q_lower.split()))
+    return list(variants)[:6]
+
+
+def _retrieve_documents(user_question: str) -> List:
+    embeddings, db = _load_embeddings_and_index()
+    if db is None:
+        raise RuntimeError("No knowledge base found. Please upload and process PDFs first.")
+
+    # Multi-query retrieval with diversity
+    queries = _expand_queries(user_question)
+    gathered: List = []
+    for q in queries:
+        try:
+            gathered.extend(db.max_marginal_relevance_search(q, k=6, fetch_k=18))
+        except Exception:
+            gathered.extend(db.similarity_search(q, k=6))
+
+    # Deduplicate by page content hash to avoid repeats
+    seen = set()
+    docs = []
+    for d in gathered:
+        key = getattr(d, "page_content", str(d))[:256]
+        if key in seen:
+            continue
+        seen.add(key)
+        docs.append(d)
+
+    # Optional cross-encoder reranking (if available)
+    global _CROSS
+    if CrossEncoder is not None and docs:
+        try:
+            if _CROSS is None:
+                _CROSS = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+            pairs = [(user_question, getattr(d, "page_content", "")) for d in docs]
+            scores = _CROSS.predict(pairs)
+            docs = [d for _, d in sorted(zip(scores, docs), key=lambda x: x[0], reverse=True)]
+        except Exception:
+            pass
+
+    return docs[:10]
+
+
+def _normalize_query_for_cache(q: str) -> str:
+    return " ".join((q or "").strip().lower().split())
+
+
+@lru_cache(maxsize=128)
+def get_answer_with_sources(user_question: str) -> Tuple[str, List[Dict[str, Any]]]:
     try:
-        db = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
-        docs = db.similarity_search(user_question)
+        docs = _retrieve_documents(user_question)
         if not docs:
-            return "⚠️ No relevant information found in the knowledge base."
-        chain = get_conversational_chain()
-        response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
-        return response.get("output_text", "⚠️ No answer generated.")
+            return "⚠ No relevant information found in the knowledge base.", []
+
+        sources = _doc_sources(docs)
+
+        # Primary path: Gemini via LangChain
+        try:
+            chain = get_conversational_chain()
+            context_text = _format_context(docs)
+            response = chain.invoke({"context": context_text, "question": user_question})
+            return (response if response else "⚠ No answer generated.", sources)
+        except Exception as gemini_err:
+            gemini_msg = str(gemini_err)
+            # Quota or missing key → fall back to OpenAI if configured
+            if ("429" in gemini_msg or "quota" in gemini_msg.lower() or not GOOGLE_API_KEY) and OPENAI_API_KEY:
+                try:
+                    from openai import OpenAI
+                    oai = OpenAI()
+                    context_text = _format_context(docs)
+                    system_prompt = (
+                        "You are a helpful assistant. Answer the user's question using only the given context. "
+                        "If the answer is not present, reply exactly: 'answer is not available in the context'."
+                    )
+                    user_prompt = f"Context:\n{context_text}\n\nQuestion:\n{user_question}\n\nAnswer:"
+                    chat = oai.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt},
+                        ],
+                        temperature=0.3,
+                    )
+                    return (chat.choices[0].message.content.strip(), sources)
+                except Exception as openai_err:
+                    return ("⚠ Gemini unavailable and OpenAI fallback failed: " + str(openai_err), sources)
+
+            # Otherwise, surface the Gemini error
+            if "429" in gemini_msg and "quota" in gemini_msg.lower():
+                return (
+                    "⚠ Gemini API quota exceeded. Please wait for your quota to reset or add a new API key. See https://ai.google.dev/gemini-api/docs/rate-limits for details.",
+                    sources,
+                )
+            return (f"⚠ Error from Gemini: {gemini_err}", sources)
     except Exception as e:
-        error_msg = str(e)
-        if "429" in error_msg and "quota" in error_msg:
-            return ("⚠️ Gemini API quota exceeded. Please wait for your quota to reset or add a new API key. "
-                    "See https://ai.google.dev/gemini-api/docs/rate-limits for details.")
-        return f"⚠️ Error retrieving answer: {e}"
+        return (f"⚠ Error retrieving answer: {e}", [])
+
+
+def get_answer(user_question: str) -> str:
+    # Backward-compatible wrapper that drops sources
+    answer, _ = get_answer_with_sources(user_question)
+    return answer
 
 # -------------------- Translation helper (Sarvam) --------------------
 def translate_text(text: str, target_language_code: str, source_language_code: str = "en-IN"):
@@ -119,14 +281,14 @@ def answer_from_transcript(transcript_text: str, target_language_code: str = "en
     if requested (target != 'en-IN'). Save final answer to transcripts/latest_answer.txt.
     """
     if not transcript_text:
-        msg = "⚠️ Empty transcript."
+        msg = "⚠ Empty transcript."
         with open(LATEST_ANSWER_PATH, "w", encoding="utf-8") as f:
             f.write(msg)
         return msg
 
     answer_en = get_answer(transcript_text)
     final_answer = answer_en
-    if answer_en and not answer_en.startswith("⚠️") and target_language_code != "en-IN":
+    if answer_en and not answer_en.startswith("⚠") and target_language_code != "en-IN":
         final_answer = translate_text(answer_en, target_language_code, source_language_code="en-IN")
 
     # Save answer

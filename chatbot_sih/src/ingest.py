@@ -24,8 +24,8 @@ INDEX_DIR = BASE_DIR / "chatbot_sih" / "faiss_index"
 
 # model choices: small -> fast, larger -> better quality (more RAM/time)
 MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2"   # you used this and it works for you
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+CHUNK_SIZE = 600
+CHUNK_OVERLAP = 120
 BATCH_SIZE = 64   # used by the wrapper internally (if supported)
 
 def find_pdfs(pdf_dir: Path) -> List[Path]:
